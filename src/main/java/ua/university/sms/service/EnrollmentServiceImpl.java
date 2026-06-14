@@ -12,12 +12,12 @@ import ua.university.sms.model.dto.enrollment.GpaResponse;
 import ua.university.sms.model.dto.enrollment.GradeRequest;
 import ua.university.sms.model.entity.Course;
 import ua.university.sms.model.entity.Enrollment;
+import ua.university.sms.model.entity.Grade;
 import ua.university.sms.model.entity.Student;
 import ua.university.sms.repository.CourseRepository;
 import ua.university.sms.repository.EnrollmentRepository;
 import ua.university.sms.repository.StudentRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -32,7 +32,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public EnrollmentResponse enroll(EnrollmentRequest request) {
-        if (enrollmentRepository.existsByStudentIdAndCourseId(request.studentId(), request.courseId())) {
+        if (enrollmentRepository.existsByStudentIdAndCourseIdAndSemesterAndYear(
+                request.studentId(), request.courseId(), request.semester(), request.year())) {
             throw new DuplicateEnrollmentException(request.studentId(), request.courseId());
         }
         Student student = studentRepository.findById(request.studentId())
@@ -43,7 +44,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         Enrollment enrollment = Enrollment.builder()
                 .student(student)
                 .course(course)
-                .enrollmentDate(LocalDate.now())
+                .semester(request.semester())
+                .year(request.year())
+                .grade(Grade.NA)
                 .paid(false)
                 .build();
         return enrollmentMapper.toResponse(enrollmentRepository.save(enrollment));
@@ -79,7 +82,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public EnrollmentResponse markAsPaid(Long enrollmentId) {
         Enrollment enrollment = findOrThrow(enrollmentId);
-        enrollment.setPaid(true);
+        enrollment.markAsPaid();
         return enrollmentMapper.toResponse(enrollmentRepository.save(enrollment));
     }
 
@@ -101,14 +104,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Transactional(readOnly = true)
     public List<GpaResponse> getAverageGpaByCourse() {
         return enrollmentRepository.findAverageGpaByCourse().stream()
-                .map(p -> new GpaResponse(p.getCourseId(), p.getCourseTitle(), p.getAverageGpa()))
-                .toList();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<GpaResponse> getAverageGpaBySemester(LocalDate from, LocalDate to) {
-        return enrollmentRepository.findAverageGpaBySemester(from, to).stream()
                 .map(p -> new GpaResponse(p.getCourseId(), p.getCourseTitle(), p.getAverageGpa()))
                 .toList();
     }

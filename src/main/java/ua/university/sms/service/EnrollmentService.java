@@ -5,7 +5,6 @@ import ua.university.sms.model.dto.enrollment.EnrollmentResponse;
 import ua.university.sms.model.dto.enrollment.GpaResponse;
 import ua.university.sms.model.dto.enrollment.GradeRequest;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface EnrollmentService {
@@ -21,5 +20,4 @@ public interface EnrollmentService {
     List<EnrollmentResponse> getUnpaidByStudent(Long studentId);
 
     List<GpaResponse> getAverageGpaByCourse();
-    List<GpaResponse> getAverageGpaBySemester(LocalDate from, LocalDate to);
 }

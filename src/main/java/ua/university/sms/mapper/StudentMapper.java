@@ -13,9 +13,8 @@ public class StudentMapper {
                 .firstName(req.firstName())
                 .lastName(req.lastName())
                 .email(req.email())
-                .enrollmentDate(req.enrollmentDate())
+                .enrollmentYear(req.enrollmentYear())
                 .status(req.status())
-                .year(req.year())
                 .build();
     }
 
@@ -25,9 +24,8 @@ public class StudentMapper {
                 student.getFirstName(),
                 student.getLastName(),
                 student.getEmail(),
-                student.getEnrollmentDate(),
-                student.getStatus(),
-                student.getYear()
+                student.getEnrollmentYear(),
+                student.getStatus()
         );
     }
 
@@ -35,8 +33,7 @@ public class StudentMapper {
         student.setFirstName(req.firstName());
         student.setLastName(req.lastName());
         student.setEmail(req.email());
-        student.setEnrollmentDate(req.enrollmentDate());
+        student.setEnrollmentYear(req.enrollmentYear());
         student.setStatus(req.status());
-        student.setYear(req.year());
     }
 }

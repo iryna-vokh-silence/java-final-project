@@ -1,9 +1,14 @@
 package ua.university.sms.model.dto.teacher;
 
+import ua.university.sms.model.entity.TeacherPosition;
+
+import java.time.LocalDate;
+
 public record TeacherResponse(
     Long id,
     String firstName,
     String lastName,
     String email,
-    String department
+    LocalDate dateOfBirth,
+    TeacherPosition position
 ) {}

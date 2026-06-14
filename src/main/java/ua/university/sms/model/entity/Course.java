@@ -20,7 +20,7 @@ public class Course {
     private Long id;
 
     @Column(nullable = false, length = 200)
-    private String title;
+    private String name;
 
     @Column(columnDefinition = "TEXT")
     private String description;

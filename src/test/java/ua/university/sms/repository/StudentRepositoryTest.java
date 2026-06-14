@@ -9,8 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import ua.university.sms.model.entity.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -20,17 +18,10 @@ import static org.assertj.core.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class StudentRepositoryTest {
 
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private EnrollmentRepository enrollmentRepository;
-
-    @Autowired
-    private CourseRepository courseRepository;
-
-    @Autowired
-    private TeacherRepository teacherRepository;
+    @Autowired private StudentRepository studentRepository;
+    @Autowired private EnrollmentRepository enrollmentRepository;
+    @Autowired private CourseRepository courseRepository;
+    @Autowired private TeacherRepository teacherRepository;
 
     private Student student1;
     private Student student2;
@@ -44,17 +35,15 @@ class StudentRepositoryTest {
 
         student1 = studentRepository.save(Student.builder()
                 .firstName("John").lastName("Smith").email("john@uni.ua")
-                .enrollmentDate(LocalDate.of(2023, 9, 1))
-                .status(StudentStatus.ACTIVE).year(1).build());
+                .enrollmentYear(2023).status(StudentStatus.ACTIVE).build());
 
         student2 = studentRepository.save(Student.builder()
                 .firstName("Anna").lastName("Johnson").email("anna@uni.ua")
-                .enrollmentDate(LocalDate.of(2022, 9, 1))
-                .status(StudentStatus.INACTIVE).year(2).build());
+                .enrollmentYear(2022).status(StudentStatus.ON_LEAVE).build());
     }
 
     @Test
-    void searchByName_partialFirstName_returnsMatch() {
+    void searchByName_partialLastName_returnsMatch() {
         List<Student> result = studentRepository.searchByName("smith");
 
         assertThat(result).hasSize(1);
@@ -62,7 +51,7 @@ class StudentRepositoryTest {
     }
 
     @Test
-    void searchByName_partialLastName_returnsMatches() {
+    void searchByName_partialLastNameSecond_returnsMatches() {
         List<Student> result = studentRepository.searchByName("son");
 
         assertThat(result).hasSize(1);
@@ -78,8 +67,8 @@ class StudentRepositoryTest {
     }
 
     @Test
-    void findByYear_returnsCorrect() {
-        List<Student> result = studentRepository.findByYear(2);
+    void findByEnrollmentYear_returnsCorrect() {
+        List<Student> result = studentRepository.findByEnrollmentYear(2022);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getEmail()).isEqualTo("anna@uni.ua");
@@ -88,13 +77,14 @@ class StudentRepositoryTest {
     @Test
     void findTopStudentsByGpa_returnsStudentsWithGrades() {
         Teacher teacher = teacherRepository.save(Teacher.builder()
-                .firstName("Prof").lastName("X").email("prof@uni.ua").department("CS").build());
+                .firstName("Prof").lastName("X").email("prof@uni.ua")
+                .position(TeacherPosition.PROFESSOR).build());
         Course course = courseRepository.save(Course.builder()
-                .title("Math").credits(3).teacher(teacher).build());
+                .name("Math").credits(3).teacher(teacher).build());
 
         enrollmentRepository.save(Enrollment.builder()
                 .student(student1).course(course)
-                .enrollmentDate(LocalDate.now()).grade(new BigDecimal("90.0")).paid(true).build());
+                .semester("Fall").year(2023).grade(Grade.A).paid(true).build());
 
         List<Student> top = studentRepository.findTopStudentsByGpa(PageRequest.of(0, 5));
 

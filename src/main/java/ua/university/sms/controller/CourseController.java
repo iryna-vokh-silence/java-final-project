@@ -13,7 +13,7 @@ import ua.university.sms.service.CourseService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/courses")
+@RequestMapping("/api/courses")
 @RequiredArgsConstructor
 @Tag(name = "Courses", description = "Course management API")
 public class CourseController {
@@ -34,7 +34,7 @@ public class CourseController {
     }
 
     @GetMapping
-    @Operation(summary = "List courses with optional filters: teacherId, credits")
+    @Operation(summary = "List courses. Optional filters: teacherId, credits")
     public List<CourseResponse> getAll(
             @RequestParam(required = false) Long teacherId,
             @RequestParam(required = false) Integer credits) {

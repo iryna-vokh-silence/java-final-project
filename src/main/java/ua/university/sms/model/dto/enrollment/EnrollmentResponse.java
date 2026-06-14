@@ -1,15 +1,15 @@
 package ua.university.sms.model.dto.enrollment;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import ua.university.sms.model.entity.Grade;
 
 public record EnrollmentResponse(
     Long id,
     Long studentId,
     String studentFullName,
     Long courseId,
-    String courseTitle,
-    LocalDate enrollmentDate,
-    BigDecimal grade,
+    String courseName,
+    String semester,
+    Integer year,
+    Grade grade,
     Boolean paid
 ) {}

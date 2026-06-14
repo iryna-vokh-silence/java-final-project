@@ -10,6 +10,7 @@ import ua.university.sms.mapper.CourseMapper;
 import ua.university.sms.model.dto.course.CourseRequest;
 import ua.university.sms.model.entity.Course;
 import ua.university.sms.model.entity.Teacher;
+import ua.university.sms.model.entity.TeacherPosition;
 import ua.university.sms.repository.CourseRepository;
 import ua.university.sms.repository.TeacherRepository;
 
@@ -46,8 +47,9 @@ class CourseServiceTest {
     @Test
     void create_withValidTeacher_savesAndReturns() {
         CourseRequest req = new CourseRequest("Math", "Basic math", 3, 1L);
-        Teacher teacher = Teacher.builder().id(1L).firstName("Prof").lastName("X").build();
-        Course course = Course.builder().id(10L).title("Math").credits(3).teacher(teacher).build();
+        Teacher teacher = Teacher.builder().id(1L).firstName("Prof").lastName("X")
+                .position(TeacherPosition.PROFESSOR).build();
+        Course course = Course.builder().id(10L).name("Math").credits(3).teacher(teacher).build();
 
         when(teacherRepository.findById(1L)).thenReturn(Optional.of(teacher));
         when(courseMapper.toEntity(req, teacher)).thenReturn(course);

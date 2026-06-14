@@ -13,7 +13,8 @@ public class TeacherMapper {
                 .firstName(req.firstName())
                 .lastName(req.lastName())
                 .email(req.email())
-                .department(req.department())
+                .dateOfBirth(req.dateOfBirth())
+                .position(req.position())
                 .build();
     }
 
@@ -23,7 +24,8 @@ public class TeacherMapper {
                 teacher.getFirstName(),
                 teacher.getLastName(),
                 teacher.getEmail(),
-                teacher.getDepartment()
+                teacher.getDateOfBirth(),
+                teacher.getPosition()
         );
     }
 
@@ -31,6 +33,7 @@ public class TeacherMapper {
         teacher.setFirstName(req.firstName());
         teacher.setLastName(req.lastName());
         teacher.setEmail(req.email());
-        teacher.setDepartment(req.department());
+        teacher.setDateOfBirth(req.dateOfBirth());
+        teacher.setPosition(req.position());
     }
 }

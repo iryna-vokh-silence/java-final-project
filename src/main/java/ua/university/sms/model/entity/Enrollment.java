@@ -3,22 +3,19 @@ package ua.university.sms.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 @Entity
 @Table(
     name = "enrollments",
     uniqueConstraints = @UniqueConstraint(
-        name = "uq_student_course",
-        columnNames = {"student_id", "course_id"}
+        name = "uq_student_course_semester_year",
+        columnNames = {"student_id", "course_id", "semester", "enrollment_year"}
     )
 )
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Enrollment {
+public class Enrollment implements Payable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enrollment_seq")
@@ -33,13 +30,23 @@ public class Enrollment {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    @Column(name = "enrollment_date", nullable = false)
-    private LocalDate enrollmentDate;
+    @Column(nullable = false, length = 20)
+    private String semester;
 
-    @Column(precision = 4, scale = 2)
-    private BigDecimal grade;
+    @Column(name = "enrollment_year", nullable = false)
+    private Integer year;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 5)
+    @Builder.Default
+    private Grade grade = Grade.NA;
 
     @Column(nullable = false)
     @Builder.Default
     private Boolean paid = false;
+
+    @Override
+    public void markAsPaid() {
+        this.paid = true;
+    }
 }

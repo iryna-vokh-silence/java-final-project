@@ -11,7 +11,7 @@ public class CourseMapper {
 
     public Course toEntity(CourseRequest req, Teacher teacher) {
         return Course.builder()
-                .title(req.title())
+                .name(req.name())
                 .description(req.description())
                 .credits(req.credits())
                 .teacher(teacher)
@@ -22,7 +22,7 @@ public class CourseMapper {
         Teacher teacher = course.getTeacher();
         return new CourseResponse(
                 course.getId(),
-                course.getTitle(),
+                course.getName(),
                 course.getDescription(),
                 course.getCredits(),
                 teacher.getId(),
@@ -31,7 +31,7 @@ public class CourseMapper {
     }
 
     public void updateEntity(Course course, CourseRequest req, Teacher teacher) {
-        course.setTitle(req.title());
+        course.setName(req.name());
         course.setDescription(req.description());
         course.setCredits(req.credits());
         course.setTeacher(teacher);

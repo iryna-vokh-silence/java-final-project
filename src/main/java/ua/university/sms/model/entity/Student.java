@@ -3,8 +3,6 @@ package ua.university.sms.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +28,12 @@ public class Student {
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(name = "enrollment_date", nullable = false)
-    private LocalDate enrollmentDate;
+    @Column(name = "enrollment_year", nullable = false)
+    private Integer enrollmentYear;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private StudentStatus status;
-
-    @Column(name = "study_year", nullable = false)
-    private Integer year;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

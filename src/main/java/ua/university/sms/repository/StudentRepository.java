@@ -1,5 +1,6 @@
 package ua.university.sms.repository;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,11 +12,16 @@ import java.util.List;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
+    Page<Student> findAll(Pageable pageable);
+
     List<Student> findByStatus(StudentStatus status);
+    Page<Student> findByStatus(StudentStatus status, Pageable pageable);
 
-    List<Student> findByYear(Integer year);
+    List<Student> findByEnrollmentYear(Integer enrollmentYear);
+    Page<Student> findByEnrollmentYear(Integer enrollmentYear, Pageable pageable);
 
-    List<Student> findByStatusAndYear(StudentStatus status, Integer year);
+    List<Student> findByStatusAndEnrollmentYear(StudentStatus status, Integer enrollmentYear);
+    Page<Student> findByStatusAndEnrollmentYear(StudentStatus status, Integer enrollmentYear, Pageable pageable);
 
     @Query("SELECT s FROM Student s WHERE " +
            "LOWER(s.firstName) LIKE LOWER(CONCAT('%', :name, '%')) OR " +
@@ -26,9 +32,9 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query("SELECT s FROM Student s " +
            "JOIN s.enrollments e " +
-           "WHERE e.grade IS NOT NULL " +
+           "WHERE e.grade <> 'NA' " +
            "GROUP BY s " +
-           "ORDER BY AVG(e.grade) DESC")
+           "ORDER BY COUNT(CASE WHEN e.grade = 'A' THEN 1 END) DESC")
     List<Student> findTopStudentsByGpa(Pageable pageable);
 
     boolean existsByEmail(String email);

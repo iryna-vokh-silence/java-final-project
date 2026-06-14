@@ -13,8 +13,9 @@ public class EnrollmentMapper {
                 e.getStudent().getId(),
                 e.getStudent().getFirstName() + " " + e.getStudent().getLastName(),
                 e.getCourse().getId(),
-                e.getCourse().getTitle(),
-                e.getEnrollmentDate(),
+                e.getCourse().getName(),
+                e.getSemester(),
+                e.getYear(),
                 e.getGrade(),
                 e.getPaid()
         );

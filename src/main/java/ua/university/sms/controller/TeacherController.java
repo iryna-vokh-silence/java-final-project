@@ -13,7 +13,7 @@ import ua.university.sms.service.TeacherService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/teachers")
+@RequestMapping("/api/teachers")
 @RequiredArgsConstructor
 @Tag(name = "Teachers", description = "Teacher management API")
 public class TeacherController {
